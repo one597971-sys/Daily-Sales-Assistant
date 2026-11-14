@@ -520,9 +520,9 @@
 <div class="nav-wrap">
   <div class="nav-inner">
     <nav class="view-nav" aria-label="Sections">
-      <button type="button" data-view="dashboard" class="active" onclick="showView('dashboard')">Dashboard</button>
-      <button type="button" data-view="history" onclick="showView('history')">History</button>
-      <button type="button" data-view="export" onclick="showView('export')">Export Data</button>
+      <button type="button" role="tab" id="tab-dashboard" aria-controls="view-dashboard" aria-selected="true" tabindex="0" data-view="dashboard" class="active" onclick="showView('dashboard')">Dashboard</button>
+      <button type="button" role="tab" id="tab-history" aria-controls="view-history" aria-selected="false" tabindex="-1" data-view="history" onclick="showView('history')">History</button>
+      <button type="button" role="tab" id="tab-export" aria-controls="view-export" aria-selected="false" tabindex="-1" data-view="export" onclick="showView('export')">Export Data</button>
     </nav>
   </div>
 </div>
@@ -538,7 +538,7 @@
 <main>
 
   <!-- ═════════ DASHBOARD ═════════ -->
-  <section id="view-dashboard">
+  <section id="view-dashboard" role="tabpanel" aria-labelledby="tab-dashboard">
 
     <div class="status-bar">
       <div class="status-pill"><div class="dot"></div> Shop: <strong id="statusShop" class="shop-name-badge">Karura</strong></div>
@@ -629,7 +629,7 @@
   </section>
 
   <!-- ═════════ HISTORY ═════════ -->
-  <section id="view-history" hidden>
+  <section id="view-history" role="tabpanel" aria-labelledby="tab-history" hidden>
     <div class="section-head">
       <h2>Sales History</h2>
       <div class="section-line"></div>
@@ -644,7 +644,7 @@
   </section>
 
   <!-- ═════════ EXPORT ═════════ -->
-  <section id="view-export" hidden>
+  <section id="view-export" role="tabpanel" aria-labelledby="tab-export" hidden>
     <div class="section-head">
       <h2>Export Data</h2>
       <div class="section-line"></div>
@@ -762,17 +762,36 @@ window.addEventListener('DOMContentLoaded', () => {
 // ─────────────────────────────────────────────────────────────
 
 function showView(view) {
+  if (!['dashboard', 'history', 'export'].includes(view)) return;
   currentView = view;
-  ['dashboard', 'history', 'export'].forEach(v => { $(`view-${v}`).hidden = (v !== view); });
-  document.querySelectorAll('.view-nav button').forEach(b => {
-    const on = b.dataset.view === view;
-    b.classList.toggle('active', on);
-    if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+  ['dashboard', 'history', 'export'].forEach(v => {
+    const panel = $(`view-${v}`);
+    const tab = $(`tab-${v}`);
+    const selected = v === view;
+    panel.hidden = !selected;
+    tab.classList.toggle('active', selected);
+    tab.setAttribute('aria-selected', String(selected));
+    tab.tabIndex = selected ? 0 : -1;
   });
   $('shopTabsWrap').hidden = (view === 'export');
   refreshView();
   window.scrollTo(0, 0);
 }
+
+// Keyboard support for the three section tabs.
+document.querySelector('.view-nav').addEventListener('keydown', event => {
+  const views = ['dashboard', 'history', 'export'];
+  const current = views.indexOf(currentView);
+  let next = current;
+  if (event.key === 'ArrowRight') next = (current + 1) % views.length;
+  else if (event.key === 'ArrowLeft') next = (current - 1 + views.length) % views.length;
+  else if (event.key === 'Home') next = 0;
+  else if (event.key === 'End') next = views.length - 1;
+  else return;
+  event.preventDefault();
+  showView(views[next]);
+  $(`tab-${views[next]}`).focus();
+});
 
 function refreshView() {
   if (currentView === 'dashboard') syncDashboard();
