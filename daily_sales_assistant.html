@@ -500,7 +500,7 @@
         <div class="fin-label">P&amp;L / Cash Difference <span class="tag-auto">AUTO</span></div>
         <div class="fin-value zero" id="plDisplay">—</div>
         <div class="fin-pl-chip zero" id="plChip">Enter closing cash</div>
-        <div class="fin-note">Total sales − cash in. A cash reconciliation difference, not verified net profit.</div>
+        <div class="fin-note">Cash in − total sales. Negative means sales exceed cash in; positive means cash in exceeds sales. This is a cash reconciliation difference, not verified net profit.</div>
       </article>
 
     </div>
@@ -606,7 +606,7 @@ const SHOP_NAMES = {
 };
 
 const PRODUCTS_BASE = [
-  { id: 'fresh_milk',    name: 'Fresh Milk',     unit: 'Liters',  price: 70,   hasPriceInput: false, isMilk: true  },
+  { id: 'fresh_milk',    name: 'Fresh Milk',     unit: 'Liters',  price: 75,   hasPriceInput: false, isMilk: true  },
   { id: 'morning_tea',   name: 'Morning Tea',    unit: '0.25L',   price: -20,  hasPriceInput: false, isFixedDeduction: true },
   { id: 'yoghurt_250',   name: 'Yoghurt 250ml',  unit: 'pcs',     price: 40,   hasPriceInput: false              },
   { id: 'yoghurt_300',   name: 'Yoghurt 300ml',  unit: 'pcs',     price: 50,   hasPriceInput: false              },
@@ -877,12 +877,12 @@ function formatKES(n, signed = false) {
 
 const round2 = (n) => Math.round((n + Number.EPSILON) * 100) / 100;
 
-// Cash In = Closing − Opening ; Difference = Total Sales − Cash In
+// Cash In = Closing − Opening ; Difference = Cash In − Total Sales
 // Returns nulls when the closing cash has not been recorded.
 function computeCash(opening, closing, totalSales) {
   if (!Number.isFinite(closing) || !Number.isFinite(opening)) return { cashIn: null, diff: null };
   const cashIn = round2(closing - opening);
-  const diff = round2(totalSales - cashIn);
+  const diff = round2(cashIn - totalSales);
   return { cashIn, diff };
 }
 
@@ -913,8 +913,8 @@ function updateFinancials(totalSales) {
     plEl.textContent = '—';
   } else {
     plEl.textContent = formatKES(diff, true);
-    if (diff > 0) { cls = 'pos'; label = 'Sales higher than cash in'; }
-    else if (diff < 0) { cls = 'neg'; label = 'Cash in higher than sales'; }
+    if (diff > 0) { cls = 'pos'; label = 'Cash in higher than sales'; }
+    else if (diff < 0) { cls = 'neg'; label = 'Sales higher than cash in'; }
     else { cls = 'zero'; label = 'Balanced'; }
   }
   plEl.className = 'fin-value ' + cls;
