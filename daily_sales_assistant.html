@@ -3,579 +3,599 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Daily Sales Assistant – Dairy</title>
+<meta name="theme-color" content="#174B36">
+<title>ALMA FARM FRESH – Daily Sales Assistant</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f5f0e8;
-    --surface: #fffdf8;
-    --surface2: #f0ebe0;
-    --border: #d9d0bc;
-    --border2: #c8be aa;
-    --green: #2d6a4f;
-    --green-light: #52b788;
-    --green-faint: #d8f3dc;
-    --amber: #e76f00;
-    --amber-light: #fff3e0;
-    --red: #c0392b;
-    --red-faint: #fdecea;
-    --text: #1a1a14;
-    --text2: #5a5648;
-    --text3: #9a9080;
-    --mono: 'DM Mono', monospace;
-    --sans: 'Sora', sans-serif;
-    --radius: 12px;
-    --radius-sm: 8px;
-    --shadow: 0 2px 12px rgba(0,0,0,0.08);
-    --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+    /* Alma Farm Fresh design system */
+    --white: #FFFFFF;
+    --green: #174B36;
+    --gold: #C6A45C;
+    --grey: #F4F6F3;
+
+    /* Derived tints and status colours */
+    --green-hover: #1F5E45;
+    --green-tint: #E4EDE8;
+    --gold-tint: #F6EFDD;
+    --line: #DCE3DE;
+    --text: #14231C;
+    --text2: #4B5A52;
+    --text3: #86928B;
+    --pos: #1E7F4F;
+    --neg: #C0392B;
+    --zero: #6B726E;
+
+    --mono: 'DM Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --sans: 'Sora', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --radius: 14px;
+    --radius-sm: 10px;
+    --shadow: 0 1px 2px rgba(23,75,54,0.06), 0 6px 18px rgba(23,75,54,0.07);
+    --shadow-lg: 0 10px 32px rgba(23,75,54,0.16);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  [hidden] { display: none !important; }
 
+  html { -webkit-text-size-adjust: 100%; }
   body {
-    background: var(--bg);
+    background: var(--grey);
     font-family: var(--sans);
     color: var(--text);
     min-height: 100vh;
-    padding-bottom: 60px;
+    padding-bottom: 72px;
+    overflow-x: hidden;
+  }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip: rect(0 0 0 0); white-space: nowrap;
   }
 
   /* ── HEADER ── */
-  header {
+  .app-header {
     background: var(--green);
-    color: #fff;
-    padding: 18px 24px 16px;
+    color: var(--white);
+    padding: 12px 16px;
     position: sticky;
     top: 0;
     z-index: 100;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+    border-bottom: 3px solid var(--gold);
+    box-shadow: 0 2px 14px rgba(0,0,0,0.18);
   }
   .header-inner {
-    max-width: 900px;
+    max-width: 1100px;
     margin: 0 auto;
     display: flex;
     align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex: 1;
-    min-width: 200px;
-  }
-  .brand-icon {
-    font-size: 28px;
-    line-height: 1;
-  }
-  .brand-text h1 {
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    line-height: 1.2;
-  }
-  .brand-text p {
-    font-size: 11px;
-    opacity: 0.7;
-    font-weight: 300;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-  .header-controls {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  .shop-select-wrap {
-    position: relative;
-  }
-  .shop-select-wrap::after {
-    content: '▾';
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--green);
-    pointer-events: none;
-    font-size: 12px;
-  }
-  select, input[type="date"] {
-    font-family: var(--sans);
-    font-size: 13px;
-    border: none;
-    border-radius: var(--radius-sm);
-    padding: 8px 30px 8px 12px;
-    background: #fff;
-    color: var(--text);
-    cursor: pointer;
-    appearance: none;
-    font-weight: 600;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-  }
-  input[type="date"] {
-    padding: 8px 12px;
-    cursor: pointer;
-  }
-  select:focus, input[type="date"]:focus {
-    outline: 2px solid var(--green-light);
-  }
-
-  /* ── SHOP BADGE ── */
-  .shop-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 14px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-  .badge-karura { background: #d8f3dc; color: #1b4332; }
-  .badge-bima { background: #fff3cd; color: #7d4e00; }
-  .badge-kiamumbi { background: #e8d5f5; color: #4a1d79; }
-  .badge-kiwanja { background: #d0e8ff; color: #003d80; }
-
-  /* ── MAIN LAYOUT ── */
-  main {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 24px 16px;
-  }
-
-  /* ── STATUS BAR ── */
-  .status-bar {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-  }
-  .status-pill {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 6px 16px;
-    font-size: 12px;
-    color: var(--text2);
-  }
-  .status-pill strong {
-    color: var(--text);
-    font-size: 13px;
-  }
-  .dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--green-light);
-  }
-
-  /* ── CASH SUMMARY CARD ── */
-  .cash-card {
-    background: var(--green);
-    color: #fff;
-    border-radius: var(--radius);
-    padding: 20px 24px;
-    margin-bottom: 20px;
-    display: flex;
     justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-    box-shadow: var(--shadow-lg);
+    gap: 12px;
     flex-wrap: wrap;
   }
-  .cash-label {
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    opacity: 0.75;
-    margin-bottom: 4px;
+  .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .logo {
+    width: 46px; height: 46px; flex: none;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    display: grid; place-items: center;
+    font-weight: 700; font-size: 21px;
+    letter-spacing: 0;
   }
-  .cash-amount {
-    font-family: var(--mono);
-    font-size: 36px;
-    font-weight: 500;
-    letter-spacing: -0.02em;
+  .company {
+    font-size: 21px; font-weight: 700; letter-spacing: 0.14em; line-height: 1.1;
+    white-space: nowrap;
   }
-  .cash-sub {
-    font-size: 12px;
-    opacity: 0.6;
-    margin-top: 4px;
+  .app-name { font-size: 13px; font-weight: 600; margin-top: 3px; }
+  .app-sub {
+    font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--gold); font-weight: 600; margin-top: 1px;
   }
-  .cash-breakdown {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    text-align: right;
+  .header-date input[type="date"] {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--white);
+    border: 0;
+    border-radius: var(--radius-sm);
+    padding: 9px 12px;
+    min-height: 42px;
+    cursor: pointer;
   }
-  .cash-item {
-    font-size: 12px;
-    opacity: 0.8;
-    font-family: var(--mono);
+  .header-date input[type="date"]:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+
+  /* ── NAVIGATION ── */
+  .nav-wrap { background: var(--white); border-bottom: 1px solid var(--line); }
+  .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+  .view-nav { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+  .view-nav::-webkit-scrollbar, .shop-tabs::-webkit-scrollbar { display: none; }
+  .view-nav button {
+    flex: none;
+    font-family: var(--sans); font-size: 13px; font-weight: 600;
+    color: var(--text2); background: transparent; border: 0;
+    border-bottom: 3px solid transparent;
+    padding: 14px 16px 11px; min-height: 48px;
+    cursor: pointer;
+  }
+  .view-nav button:hover { color: var(--green); }
+  .view-nav button.active { color: var(--green); border-bottom-color: var(--gold); }
+
+  .shop-tabs-wrap { background: var(--grey); border-bottom: 1px solid var(--line); }
+  .shop-tabs {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; gap: 8px; padding: 12px 16px;
+    overflow-x: auto; scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+  }
+  .shop-tab {
+    flex: none; scroll-snap-align: start;
+    font-family: var(--sans); font-size: 13px; font-weight: 600;
+    background: var(--white); color: var(--text2);
+    border: 1.5px solid var(--line); border-radius: 999px;
+    padding: 9px 20px; min-height: 42px; cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .shop-tab:hover { border-color: var(--green); color: var(--green); }
+  .shop-tab.active {
+    background: var(--green); color: var(--white); border-color: var(--green);
+    box-shadow: inset 0 -3px 0 var(--gold);
+  }
+
+  /* ── MAIN ── */
+  main { max-width: 1100px; margin: 0 auto; padding: 20px 16px; }
+
+  .status-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .status-pill {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--white); border: 1px solid var(--line); border-radius: 999px;
+    padding: 6px 14px; font-size: 12px; color: var(--text2);
+  }
+  .status-pill strong { color: var(--text); font-size: 13px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); }
+
+  .section-head { display: flex; align-items: center; gap: 10px; margin: 6px 0 12px; }
+  .section-head h2 {
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--green);
+  }
+  .section-line { flex: 1; height: 1px; background: var(--line); }
+
+  /* ── FINANCIAL OVERVIEW ── */
+  .fin-grid {
+    display: grid; gap: 12px; margin-bottom: 22px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .fin-card {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--line);
+    border-radius: var(--radius);
+    padding: 14px 16px 16px;
+    box-shadow: var(--shadow);
+    min-width: 0;
+  }
+  .fin-card.hero { background: var(--green); border-color: var(--green); border-top-color: var(--gold); color: var(--white); }
+  .fin-label {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.09em;
+    text-transform: uppercase; color: var(--text2);
+  }
+  .fin-card.hero .fin-label { color: var(--gold); }
+  .fin-value {
+    font-family: var(--mono); font-size: 22px; font-weight: 500;
+    margin-top: 6px; color: var(--green); overflow-wrap: anywhere; line-height: 1.2;
+  }
+  .fin-card.hero .fin-value { color: var(--white); font-size: 28px; }
+  .fin-note { font-size: 11.5px; color: var(--text3); margin-top: 6px; line-height: 1.4; }
+  .fin-card.hero .fin-note { color: rgba(255,255,255,0.7); }
+  .tag-auto {
+    display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 4px;
+    background: var(--grey); color: var(--text3);
+    font-size: 9.5px; letter-spacing: 0.08em; vertical-align: middle;
+  }
+  .fin-card.hero .tag-auto { background: rgba(255,255,255,0.14); color: rgba(255,255,255,0.75); }
+  .tag-edit { background: var(--gold-tint); color: #7A5F22; }
+
+  .fin-pl-chip {
+    display: inline-block; margin-top: 8px; padding: 3px 10px; border-radius: 999px;
+    font-size: 11px; font-weight: 600; background: var(--grey); color: var(--zero);
+  }
+  .pos { color: var(--pos) !important; }
+  .neg { color: var(--neg) !important; }
+  .zero { color: var(--zero) !important; }
+  .fin-pl-chip.pos { background: #E3F2EA; }
+  .fin-pl-chip.neg { background: #FBE9E7; }
+
+  details.breakdown { margin-top: 10px; }
+  details.breakdown summary {
+    cursor: pointer; font-size: 11.5px; color: var(--gold); font-weight: 600;
+    list-style: none; min-height: 24px;
+  }
+  details.breakdown summary::-webkit-details-marker { display: none; }
+  details.breakdown summary::after { content: ' ▾'; }
+  details.breakdown[open] summary::after { content: ' ▴'; }
+  .cash-item { font-size: 12px; font-family: var(--mono); color: rgba(255,255,255,0.85); margin-top: 4px; display: flex; justify-content: space-between; gap: 10px; }
+  .cash-item .deduct { color: #FFB4A9; }
+
+  .cash-input {
+    width: 100%; margin-top: 8px; min-height: 48px;
+    font-family: var(--mono); font-size: 20px; font-weight: 500;
+    padding: 10px 12px;
+    border: 1.5px solid var(--green); border-radius: var(--radius-sm);
+    background: var(--white); color: var(--text);
+  }
+  .cash-input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(198,164,92,0.28); }
+  .cash-input[readonly] {
+    background: var(--grey); border: 1.5px dashed var(--line); color: var(--green); cursor: default;
+  }
+  .cash-input::placeholder { color: var(--text3); font-size: 15px; }
+
+  /* Mobile: 2 columns with full-width priority cards */
+  @media (max-width: 599px) {
+    .fin-total, .fin-closing, .fin-pl { grid-column: 1 / -1; }
+  }
+  /* Tablet: 6-column grid */
+  @media (min-width: 600px) and (max-width: 999px) {
+    .fin-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    .fin-total, .fin-cashin, .fin-opening { grid-column: span 2; }
+    .fin-closing, .fin-pl { grid-column: span 3; }
+  }
+  /* Desktop: all five in a row */
+  @media (min-width: 1000px) {
+    .fin-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
   }
 
   /* ── PRODUCT TABLE ── */
-  .section-head {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
-    margin-top: 8px;
-  }
-  .section-head h2 {
-    font-size: 13px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text2);
-  }
-  .section-line {
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: var(--text2); margin-bottom: 10px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .sw { width: 22px; height: 14px; border-radius: 4px; display: inline-block; }
+  .sw-edit { background: var(--white); border: 1.5px solid var(--green); }
+  .sw-calc { background: var(--grey); border: 1.5px dashed var(--text3); }
 
   .table-wrap {
-    background: var(--surface);
-    border: 1px solid var(--border);
+    background: var(--white);
+    border: 1px solid var(--line);
     border-radius: var(--radius);
-    overflow: hidden;
     margin-bottom: 20px;
     box-shadow: var(--shadow);
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-    min-width: 620px;
-  }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 720px; }
   thead th {
-    background: var(--surface2);
-    padding: 10px 14px;
-    text-align: left;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text2);
-    border-bottom: 1px solid var(--border);
+    background: var(--green); color: var(--white);
+    padding: 11px 12px; text-align: left;
+    font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em;
     white-space: nowrap;
   }
-  tbody td {
-    padding: 10px 14px;
-    border-bottom: 1px solid var(--border);
-    vertical-align: middle;
-  }
-  tbody tr:last-child td {
-    border-bottom: none;
-  }
-  tbody tr:hover {
-    background: var(--surface2);
-  }
+  thead th.th-calc { color: var(--gold); }
+  tbody td { padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; background: var(--white); }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: #FAFBF9; }
+  th:first-child, td:first-child { position: sticky; left: 0; z-index: 1; }
+  thead th:first-child { z-index: 2; }
+  td:first-child { box-shadow: 1px 0 0 var(--line); }
 
-  .product-name {
-    font-weight: 600;
-    color: var(--text);
-    font-size: 13px;
-    white-space: nowrap;
+  .product-name { font-weight: 600; font-size: 13px; white-space: nowrap; }
+  .product-price { font-family: var(--mono); font-size: 11px; color: var(--text3); margin-top: 2px; }
+  .deduct-tag {
+    display: inline-block; background: #FBE9E7; color: var(--neg);
+    font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;
+    letter-spacing: 0.06em; text-transform: uppercase;
   }
-  .product-price {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text3);
-    margin-top: 2px;
-  }
-  .free-tag {
-    display: inline-block;
-    background: var(--green-faint);
-    color: var(--green);
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 4px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
+  .muted-note { text-align: center; color: var(--text3); font-size: 12px; font-style: italic; }
 
-  /* Number inputs */
-  input[type="number"], input.custom-price {
-    font-family: var(--mono);
-    font-size: 13px;
-    width: 80px;
-    padding: 7px 10px;
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    background: var(--bg);
-    color: var(--text);
+  .table-wrap input[type="number"] {
+    font-family: var(--mono); font-size: 13px;
+    width: 84px; min-height: 40px; padding: 7px 8px;
+    border: 1.5px solid var(--green); border-radius: 8px;
+    background: var(--white); color: var(--text);
     text-align: center;
     transition: border-color 0.15s, box-shadow 0.15s;
   }
-  input[type="number"]:focus, input.custom-price:focus {
-    outline: none;
-    border-color: var(--green-light);
-    box-shadow: 0 0 0 3px rgba(82,183,136,0.15);
-    background: #fff;
+  .table-wrap input[type="number"]:focus {
+    outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(198,164,92,0.28);
   }
-  input[type="number"]:read-only {
-    background: var(--surface2);
-    color: var(--text2);
-    border-style: dashed;
-    cursor: default;
+  .table-wrap input[type="number"]:read-only {
+    background: var(--grey); border: 1.5px dashed var(--line); color: var(--text2); cursor: default;
   }
-  input.cash-cell {
-    background: var(--green-faint);
-    border-color: var(--green-light);
-    color: var(--green);
-    font-weight: 500;
-    cursor: default;
-  }
-  input.balance-cell {
-    background: var(--amber-light);
-    border-color: #f0a500;
-    color: var(--amber);
-    font-weight: 500;
-    cursor: default;
-  }
-  input.adv-cell {
-    width: 90px;
-  }
-
-  /* ── SPECIAL ROW ── */
-  .total-row td {
-    background: var(--surface2);
-    font-weight: 700;
-    font-size: 13px;
-  }
+  .table-wrap input.sales-cell:read-only { color: var(--green); font-weight: 600; }
+  .table-wrap input.cash-cell:read-only { color: var(--green); font-weight: 500; }
+  .table-wrap input.cash-cell.deduct:read-only { color: var(--neg); background: #FBE9E7; border-color: #E8B9B3; }
+  .table-wrap input.balance-cell { border-color: var(--gold); }
+  .table-wrap input.adv-cell { width: 92px; }
 
   /* ── BUTTONS ── */
   .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 20px;
-    border-radius: var(--radius-sm);
-    border: none;
-    font-family: var(--sans);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    letter-spacing: 0.02em;
-    transition: transform 0.12s, box-shadow 0.12s, opacity 0.12s;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 12px 22px; min-height: 46px;
+    border-radius: var(--radius-sm); border: 0;
+    font-family: var(--sans); font-size: 14px; font-weight: 600; cursor: pointer;
+    transition: transform 0.12s, box-shadow 0.12s, background 0.12s;
   }
-  .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,0.15); }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(23,75,54,0.18); }
   .btn:active { transform: translateY(0); }
-  .btn-green { background: var(--green); color: #fff; }
-  .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text2); }
-  .btn-outline:hover { border-color: var(--green-light); color: var(--green); }
-  .btn-sm { padding: 7px 14px; font-size: 12px; }
+  .btn-green { background: var(--green); color: var(--white); box-shadow: inset 0 -3px 0 var(--gold); }
+  .btn-green:hover { background: var(--green-hover); }
+  .btn-outline { background: var(--white); border: 1.5px solid var(--line); color: var(--text2); }
+  .btn-outline:hover { border-color: var(--green); color: var(--green); }
+  .actions-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
+  @media (max-width: 599px) { .actions-bar .btn { flex: 1 1 140px; } }
 
-  .actions-bar {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 24px;
+  /* ── HISTORY ── */
+  .hist-layout { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); align-items: start; }
+  @media (min-width: 900px) { .hist-layout { grid-template-columns: 300px minmax(0, 1fr); } }
+  .panel {
+    background: var(--white); border: 1px solid var(--line);
+    border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; min-width: 0;
   }
+  .panel h3 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); margin-bottom: 10px; }
+  .hist-list { display: grid; gap: 8px; max-height: 340px; overflow-y: auto; padding-right: 2px; }
+  @media (min-width: 900px) { .hist-list { max-height: 70vh; } }
+  .hist-item {
+    width: 100%; text-align: left; cursor: pointer;
+    font-family: var(--sans); color: var(--text);
+    background: var(--grey); border: 1.5px solid transparent; border-radius: var(--radius-sm);
+    padding: 10px 12px; min-height: 48px;
+  }
+  .hist-item:hover { border-color: var(--green); }
+  .hist-item.active { background: var(--white); border-color: var(--gold); box-shadow: inset 3px 0 0 var(--gold); }
+  .hist-item .hi-top { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; font-weight: 600; }
+  .hist-item .hi-top span:last-child { font-family: var(--mono); font-weight: 500; color: var(--green); }
+  .hist-item .hi-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+  .hist-title { font-size: 16px; font-weight: 700; color: var(--green); }
+  .hist-sub { font-size: 12px; color: var(--text2); margin: 2px 0 14px; }
+  .hist-cards { display: grid; gap: 10px; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: 16px; }
+  @media (min-width: 700px) { .hist-cards { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+  .mini {
+    background: var(--grey); border-radius: var(--radius-sm); padding: 10px 12px; min-width: 0;
+    border-top: 3px solid var(--line);
+  }
+  .mini.hero { background: var(--green); border-top-color: var(--gold); color: var(--white); }
+  .mini .fin-label { font-size: 10px; }
+  .mini.hero .fin-label { color: var(--gold); }
+  .mini .mv { font-family: var(--mono); font-size: 15px; font-weight: 500; margin-top: 4px; color: var(--green); overflow-wrap: anywhere; }
+  .mini.hero .mv { color: var(--white); }
+  .nr { color: var(--text3) !important; font-family: var(--sans) !important; font-style: italic; font-size: 13px !important; font-weight: 400 !important; }
+  .empty { color: var(--text3); font-size: 13px; text-align: center; padding: 28px 8px; }
+  .hist-table td, .hist-table th { text-align: right; }
+  .hist-table td:first-child, .hist-table th:first-child { text-align: left; }
+  .hist-table td { font-family: var(--mono); font-size: 12.5px; }
+  .hist-table td:first-child { font-family: var(--sans); }
+  .hist-table table { min-width: 640px; }
 
-  /* ── DOWNLOAD SECTION ── */
-  .downloads {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px 24px;
-    box-shadow: var(--shadow);
-  }
-  .download-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 12px;
-    margin-top: 14px;
-  }
+  /* ── EXPORT ── */
+  .downloads { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+  .download-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 14px; }
   .dl-card {
-    background: var(--bg);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 16px 18px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    cursor: pointer;
+    background: var(--grey); border: 1.5px solid var(--line); border-radius: var(--radius-sm);
+    padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    cursor: pointer; min-height: 64px;
+    font-family: var(--sans); text-align: left; color: var(--text); width: 100%;
     transition: border-color 0.15s, background 0.15s, transform 0.12s;
   }
-  .dl-card:hover {
-    border-color: var(--green-light);
-    background: var(--green-faint);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(45,106,79,0.1);
-  }
-  .dl-info { flex: 1; }
-  .dl-name { font-weight: 700; font-size: 13px; color: var(--text); }
-  .dl-meta { font-size: 11px; color: var(--text3); margin-top: 2px; font-family: var(--mono); }
-  .dl-icon { font-size: 22px; }
+  .dl-card:hover { border-color: var(--gold); background: var(--gold-tint); transform: translateY(-2px); }
+  .dl-name { font-weight: 700; font-size: 14px; color: var(--green); }
+  .dl-meta { font-size: 11px; color: var(--text3); margin-top: 3px; font-family: var(--mono); }
+  .dl-icon { font-size: 20px; color: var(--green); }
+  .export-note { font-size: 12.5px; color: var(--text2); line-height: 1.5; }
+  .export-note code { font-family: var(--mono); font-size: 11.5px; background: var(--grey); padding: 1px 5px; border-radius: 4px; }
 
   /* ── TOAST ── */
   #toast {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    background: var(--green);
-    color: #fff;
-    padding: 12px 20px;
-    border-radius: var(--radius-sm);
-    font-size: 13px;
-    font-weight: 600;
-    box-shadow: var(--shadow-lg);
-    transform: translateY(80px);
-    opacity: 0;
+    position: fixed; bottom: 24px; left: 50%;
+    background: var(--green); color: var(--white);
+    padding: 12px 20px; border-radius: var(--radius-sm);
+    border-bottom: 3px solid var(--gold);
+    font-size: 13px; font-weight: 600; box-shadow: var(--shadow-lg);
+    transform: translate(-50%, 80px); opacity: 0;
     transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), opacity 0.3s;
-    z-index: 9999;
-    pointer-events: none;
+    z-index: 9999; pointer-events: none; max-width: calc(100% - 32px); text-align: center;
   }
-  #toast.show {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  #toast.error { background: var(--red); }
+  #toast.show { transform: translate(-50%, 0); opacity: 1; }
+  #toast.error { background: var(--neg); }
 
   /* ── RESPONSIVE ── */
-  @media (max-width: 600px) {
-    .cash-amount { font-size: 28px; }
-    .cash-card { padding: 16px; }
-    header { padding: 14px 16px; }
-    .brand-text h1 { font-size: 13px; }
-    input[type="number"] { width: 68px; padding: 6px 6px; }
+  @media (max-width: 599px) {
+    main { padding: 16px 12px; }
+    .company { font-size: 17px; letter-spacing: 0.1em; }
+    .logo { width: 40px; height: 40px; font-size: 18px; }
+    .header-date { flex: 1 1 100%; }
+    .header-date input[type="date"] { width: 100%; }
+    .fin-value { font-size: 20px; }
+    .fin-card.hero .fin-value { font-size: 26px; }
   }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
 <body>
 
 <!-- HEADER -->
-<header>
+<header class="app-header">
   <div class="header-inner">
     <div class="brand">
-      <div class="brand-icon">🥛</div>
+      <div class="logo" aria-hidden="true">A</div>
       <div class="brand-text">
-        <h1>Daily Sales Assistant</h1>
-        <p>Dairy Management System</p>
+        <div class="company">ALMA FARM FRESH</div>
+        <div class="app-name">Daily Sales Assistant</div>
+        <div class="app-sub">Dairy Management System</div>
       </div>
     </div>
-    <div class="header-controls">
-      <div class="shop-select-wrap">
-        <select id="shopSelect" onchange="onShopChange()">
-          <option value="karura">🏪 Karura</option>
-          <option value="bima">🏪 Bima Road</option>
-          <option value="kiamumbi">🏪 Kiamumbi</option>
-          <option value="kiwanja">🏪 Kiwanja</option>
-        </select>
-      </div>
+    <div class="header-date">
+      <label for="dateInput" class="sr-only">Record date</label>
       <input type="date" id="dateInput" onchange="onDateChange()">
     </div>
   </div>
 </header>
 
-<!-- MAIN -->
+<!-- NAVIGATION -->
+<div class="nav-wrap">
+  <div class="nav-inner">
+    <nav class="view-nav" aria-label="Sections">
+      <button type="button" data-view="dashboard" class="active" onclick="showView('dashboard')">Dashboard</button>
+      <button type="button" data-view="history" onclick="showView('history')">History</button>
+      <button type="button" data-view="export" onclick="showView('export')">Export Data</button>
+    </nav>
+  </div>
+</div>
+<div class="shop-tabs-wrap" id="shopTabsWrap">
+  <div class="shop-tabs" role="tablist" aria-label="Shops">
+    <button type="button" role="tab" class="shop-tab active" data-shop="karura" onclick="selectShop('karura')">Karura</button>
+    <button type="button" role="tab" class="shop-tab" data-shop="bima" onclick="selectShop('bima')">Bima Road</button>
+    <button type="button" role="tab" class="shop-tab" data-shop="kiamumbi" onclick="selectShop('kiamumbi')">Kiamumbi</button>
+    <button type="button" role="tab" class="shop-tab" data-shop="kiwanja" onclick="selectShop('kiwanja')">Kiwanja</button>
+  </div>
+</div>
+
 <main>
 
-  <!-- STATUS BAR -->
-  <div class="status-bar">
-    <div class="status-pill"><div class="dot"></div> Shop: <strong id="statusShop">Karura</strong></div>
-    <div class="status-pill">📅 Date: <strong id="statusDate">—</strong></div>
-    <div class="status-pill" id="statusRecord">✨ New Record</div>
-  </div>
+  <!-- ═════════ DASHBOARD ═════════ -->
+  <section id="view-dashboard">
 
-  <!-- CASH SUMMARY -->
-  <div class="cash-card">
-    <div>
-      <div class="cash-label">Total Cash Collected</div>
-      <div class="cash-amount" id="totalCashDisplay">KES 0</div>
-      <div class="cash-sub" id="totalCashSub">No sales entered yet</div>
+    <div class="status-bar">
+      <div class="status-pill"><div class="dot"></div> Shop: <strong id="statusShop">Karura</strong></div>
+      <div class="status-pill">Date: <strong id="statusDate">—</strong></div>
+      <div class="status-pill" id="statusRecord">New Record</div>
     </div>
-    <div class="cash-breakdown" id="cashBreakdown"></div>
-  </div>
 
-  <!-- PRODUCT TABLE -->
-  <div class="section-head">
-    <h2>Product Records</h2>
-    <div class="section-line"></div>
-  </div>
+    <!-- FINANCIAL OVERVIEW -->
+    <div class="section-head">
+      <h2>Financial Overview</h2>
+      <div class="section-line"></div>
+    </div>
 
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Product</th>
-          <th>Opening</th>
-          <th>Received</th>
-          <th>Total</th>
-          <th>Sales (auto)</th>
-          <th>Closing Balance</th>
-          <th>Adv. (FM only)</th>
-          <th>Cash (KES)</th>
-        </tr>
-      </thead>
-      <tbody id="productBody"></tbody>
-    </table>
-  </div>
+    <div class="fin-grid" aria-label="Financial overview">
 
-  <!-- ACTIONS -->
-  <div class="actions-bar">
-    <button class="btn btn-green" onclick="saveRecord()">💾 Save Record</button>
-    <button class="btn btn-outline" onclick="clearForm()">🔄 Clear Form</button>
-  </div>
+      <article class="fin-card hero fin-total">
+        <div class="fin-label">Total Sales <span class="tag-auto">AUTO</span></div>
+        <div class="fin-value" id="totalCashDisplay">KES 0</div>
+        <div class="fin-note" id="totalCashSub">No sales entered yet</div>
+        <details class="breakdown">
+          <summary>Sales breakdown</summary>
+          <div id="cashBreakdown"></div>
+        </details>
+      </article>
 
-  <!-- DOWNLOADS -->
-  <div class="section-head">
-    <h2>Export Data</h2>
-    <div class="section-line"></div>
-  </div>
+      <article class="fin-card fin-cashin">
+        <div class="fin-label">Cash In for the Day <span class="tag-auto">AUTO</span></div>
+        <div class="fin-value" id="cashInDisplay">—</div>
+        <div class="fin-note">Closing cash − opening cash</div>
+      </article>
 
-  <div class="downloads">
-    <div style="font-size:13px; color:var(--text2);">Download all historical records for each shop as a CSV file.</div>
-    <div class="download-grid">
-      <div class="dl-card" onclick="downloadCSV('karura')">
-        <div class="dl-info">
-          <div class="dl-name">Karura</div>
-          <div class="dl-meta" id="dlMeta_karura">karura_sales.csv</div>
-        </div>
-        <div class="dl-icon">⬇️</div>
+      <article class="fin-card fin-opening">
+        <label class="fin-label" for="openingCash">Opening Cash Balance <span class="tag-auto" id="openingTag">AUTO</span></label>
+        <input class="cash-input" type="number" id="openingCash" inputmode="decimal" step="any" value="0" readonly
+               oninput="updateTotalCash()" onchange="updateTotalCash()">
+        <div class="fin-note" id="openingNote">—</div>
+      </article>
+
+      <article class="fin-card fin-closing">
+        <label class="fin-label" for="closingCash">Closing Cash Balance <span class="tag-auto tag-edit">ENTER</span></label>
+        <input class="cash-input" type="number" id="closingCash" inputmode="decimal" step="any" min="0" placeholder="Enter closing cash"
+               oninput="updateTotalCash()" onchange="updateTotalCash()">
+        <div class="fin-note">Counted cash at close. Saved with the daily record.</div>
+      </article>
+
+      <article class="fin-card fin-pl">
+        <div class="fin-label">P&amp;L / Cash Difference <span class="tag-auto">AUTO</span></div>
+        <div class="fin-value zero" id="plDisplay">—</div>
+        <div class="fin-pl-chip zero" id="plChip">Enter closing cash</div>
+        <div class="fin-note">Total sales − cash in. A cash reconciliation difference, not verified net profit.</div>
+      </article>
+
+    </div>
+
+    <!-- PRODUCT TABLE -->
+    <div class="section-head">
+      <h2>Product Records</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="legend" aria-hidden="true">
+      <span><i class="sw sw-edit"></i> Editable input</span>
+      <span><i class="sw sw-calc"></i> Calculated automatically</span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Opening</th>
+            <th>Received</th>
+            <th class="th-calc">Total</th>
+            <th class="th-calc">Sales (auto)</th>
+            <th>Closing Balance</th>
+            <th>Adv. (FM only)</th>
+            <th class="th-calc">Cash (KES)</th>
+          </tr>
+        </thead>
+        <tbody id="productBody"></tbody>
+      </table>
+    </div>
+
+    <div class="actions-bar">
+      <button type="button" class="btn btn-green" onclick="saveRecord()">Save Record</button>
+      <button type="button" class="btn btn-outline" onclick="clearForm()">Clear Form</button>
+    </div>
+  </section>
+
+  <!-- ═════════ HISTORY ═════════ -->
+  <section id="view-history" hidden>
+    <div class="section-head">
+      <h2>Sales History</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="hist-layout">
+      <div class="panel">
+        <h3>Saved dates · <span id="histShopName">Karura</span></h3>
+        <div class="hist-list" id="histList"></div>
       </div>
-      <div class="dl-card" onclick="downloadCSV('bima')">
-        <div class="dl-info">
-          <div class="dl-name">Bima Road</div>
-          <div class="dl-meta" id="dlMeta_bima">bima_sales.csv</div>
-        </div>
-        <div class="dl-icon">⬇️</div>
+      <div class="panel" id="histDetail"></div>
+    </div>
+  </section>
+
+  <!-- ═════════ EXPORT ═════════ -->
+  <section id="view-export" hidden>
+    <div class="section-head">
+      <h2>Export Data</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="downloads">
+      <div class="export-note">
+        Download all saved records for each shop as a CSV file. Every product row also carries the day's
+        <code>Opening Cash Balance</code>, <code>Closing Cash Balance</code>, <code>Cash In for the Day</code>,
+        <code>Total Sales</code> and <code>P&amp;L / Cash Difference</code>. Records saved before cash tracking show those cash cells blank.
       </div>
-      <div class="dl-card" onclick="downloadCSV('kiamumbi')">
-        <div class="dl-info">
-          <div class="dl-name">Kiamumbi</div>
-          <div class="dl-meta" id="dlMeta_kiamumbi">kiamumbi_sales.csv</div>
-        </div>
-        <div class="dl-icon">⬇️</div>
-      </div>
-      <div class="dl-card" onclick="downloadCSV('kiwanja')">
-        <div class="dl-info">
-          <div class="dl-name">Kiwanja</div>
-          <div class="dl-meta" id="dlMeta_kiwanja">kiwanja_sales.csv</div>
-        </div>
-        <div class="dl-icon">⬇️</div>
+      <div class="download-grid">
+        <button type="button" class="dl-card" onclick="downloadCSV('karura')">
+          <div><div class="dl-name">Karura</div><div class="dl-meta" id="dlMeta_karura">karura_sales.csv</div></div>
+          <div class="dl-icon" aria-hidden="true">↓</div>
+        </button>
+        <button type="button" class="dl-card" onclick="downloadCSV('bima')">
+          <div><div class="dl-name">Bima Road</div><div class="dl-meta" id="dlMeta_bima">bima_sales.csv</div></div>
+          <div class="dl-icon" aria-hidden="true">↓</div>
+        </button>
+        <button type="button" class="dl-card" onclick="downloadCSV('kiamumbi')">
+          <div><div class="dl-name">Kiamumbi</div><div class="dl-meta" id="dlMeta_kiamumbi">kiamumbi_sales.csv</div></div>
+          <div class="dl-icon" aria-hidden="true">↓</div>
+        </button>
+        <button type="button" class="dl-card" onclick="downloadCSV('kiwanja')">
+          <div><div class="dl-name">Kiwanja</div><div class="dl-meta" id="dlMeta_kiwanja">kiwanja_sales.csv</div></div>
+          <div class="dl-icon" aria-hidden="true">↓</div>
+        </button>
       </div>
     </div>
-  </div>
+  </section>
 
 </main>
 
 <!-- TOAST -->
-<div id="toast"></div>
+<div id="toast" role="status" aria-live="polite"></div>
 
 <script>
 // ─────────────────────────────────────────────────────────────
-// DATA DEFINITIONS
+// DATA DEFINITIONS  (unchanged from the original app)
 // ─────────────────────────────────────────────────────────────
 
 const SHOP_NAMES = {
@@ -609,13 +629,32 @@ function getProducts(shop) {
 // STATE
 // ─────────────────────────────────────────────────────────────
 
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+const $ = (id) => document.getElementById(id);
+
 let currentShop = 'karura';
 let currentDate = todayStr();
+let currentView = 'dashboard';
 
+// Which shop/date the dashboard form currently holds (so switching
+// Dashboard <-> History does not discard unsaved edits).
+let dash = { shop: null, date: null };
+
+// Local calendar date (the original used UTC, which is the wrong day
+// for the first hours after midnight in Nairobi).
 function todayStr() {
-  return new Date().toISOString().split('T')[0];
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
+// Shift a YYYY-MM-DD string by n days without timezone surprises.
+function shiftDate(dateStr, n) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const t = new Date(Date.UTC(y, m - 1, d + n));
+  return `${t.getUTCFullYear()}-${String(t.getUTCMonth() + 1).padStart(2, '0')}-${String(t.getUTCDate()).padStart(2, '0')}`;
+}
+
+// Storage key format is unchanged: "<shop>_<YYYY-MM-DD>"
 function storageKey(shop, date) {
   return `${shop}_${date}`;
 }
@@ -625,34 +664,70 @@ function storageKey(shop, date) {
 // ─────────────────────────────────────────────────────────────
 
 window.addEventListener('DOMContentLoaded', () => {
-  const d = document.getElementById('dateInput');
-  d.value = currentDate;
-  renderTable();
-  loadRecord();
+  $('dateInput').value = currentDate;
+  showView('dashboard');
   updateDownloadMeta();
-  updateStatus();
 });
 
 // ─────────────────────────────────────────────────────────────
-// SHOP / DATE CHANGE
+// NAVIGATION: VIEWS, SHOP TABS, DATE
 // ─────────────────────────────────────────────────────────────
 
-function onShopChange() {
-  currentShop = document.getElementById('shopSelect').value;
-  renderTable();
-  loadRecord();
+function showView(view) {
+  currentView = view;
+  ['dashboard', 'history', 'export'].forEach(v => { $(`view-${v}`).hidden = (v !== view); });
+  document.querySelectorAll('.view-nav button').forEach(b => {
+    const on = b.dataset.view === view;
+    b.classList.toggle('active', on);
+    if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+  });
+  $('shopTabsWrap').hidden = (view === 'export');
+  refreshView();
+  window.scrollTo(0, 0);
+}
+
+function refreshView() {
+  if (currentView === 'dashboard') syncDashboard();
+  else if (currentView === 'history') renderHistory();
+  else updateDownloadMeta();
   updateStatus();
+}
+
+function selectShop(shop) {
+  if (!SHOP_NAMES[shop]) return;
+  currentShop = shop;
+  refreshView();
 }
 
 function onDateChange() {
-  currentDate = document.getElementById('dateInput').value;
-  loadRecord();
-  updateStatus();
+  const v = $('dateInput').value;
+  if (!DATE_RE.test(v)) { $('dateInput').value = currentDate; return; }
+  currentDate = v;
+  refreshView();
+}
+
+// Make the dashboard form match currentShop/currentDate (only reloads when needed).
+function syncDashboard() {
+  if (dash.shop !== currentShop) {
+    renderTable();
+    dash.shop = currentShop;
+    dash.date = null;
+  }
+  if (dash.date !== currentDate) {
+    loadRecord();
+    dash.date = currentDate;
+  }
 }
 
 function updateStatus() {
-  document.getElementById('statusShop').textContent = SHOP_NAMES[currentShop];
-  document.getElementById('statusDate').textContent = currentDate;
+  $('statusShop').textContent = SHOP_NAMES[currentShop];
+  $('statusDate').textContent = currentDate;
+  document.querySelectorAll('.shop-tab').forEach(b => {
+    const on = b.dataset.shop === currentShop;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+  $('dateInput').value = currentDate;
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -661,7 +736,7 @@ function updateStatus() {
 
 function renderTable() {
   const products = getProducts(currentShop);
-  const tbody = document.getElementById('productBody');
+  const tbody = $('productBody');
   tbody.innerHTML = '';
 
   products.forEach(p => {
@@ -671,37 +746,37 @@ function renderTable() {
     // Product name cell
     let nameCellHTML = `<div class="product-name">${p.name}</div>`;
     if (p.isFixedDeduction) {
-      nameCellHTML += `<div class="product-price"><span class="free-tag" style="background:#fdecea;color:#c0392b;">−KES 20/day</span></div>`;
+      nameCellHTML += `<div class="product-price"><span class="deduct-tag">−KES 20/day</span></div>`;
     } else if (p.hasPriceInput) {
       nameCellHTML += `<div class="product-price" style="display:flex;align-items:center;gap:4px;margin-top:4px;">
-        KES <input class="custom-price" type="number" min="0" id="price_${p.id}" placeholder="0" style="width:64px;padding:4px 6px;font-size:12px;" onchange="recalcRow('${p.id}')" oninput="recalcRow('${p.id}')">
+        KES <input class="custom-price" type="number" min="0" id="price_${p.id}" placeholder="0" style="width:64px;" onchange="recalcRow('${p.id}')" oninput="recalcRow('${p.id}')">
       </div>`;
     } else {
       nameCellHTML += `<div class="product-price">KES ${p.price}${p.isMilk ? '/L' : '/pc'}</div>`;
     }
 
     const advCell = p.isMilk
-      ? `<input type="number" class="adv-cell" id="adv_${p.id}" min="0" step="0.1" value="0" placeholder="0" onchange="recalcRow('${p.id}')" oninput="recalcRow('${p.id}')">`
+      ? `<input type="number" class="adv-cell" id="adv_${p.id}" min="0" step="0.1" value="0" placeholder="0" inputmode="decimal" aria-label="${p.name} advances" onchange="recalcRow('${p.id}')" oninput="recalcRow('${p.id}')">`
       : `<span style="color:var(--text3);font-size:12px;">—</span>`;
 
     // Morning tea: fixed deduction row — no stock inputs needed
     if (p.isFixedDeduction) {
       tr.innerHTML = `
         <td>${nameCellHTML}</td>
-        <td colspan="5" style="text-align:center;color:var(--text3);font-size:12px;font-style:italic;">Fixed daily deduction — no stock tracking</td>
+        <td colspan="5" class="muted-note">Fixed daily deduction — no stock tracking</td>
         <td><span style="color:var(--text3);font-size:12px;">—</span></td>
-        <td><input type="number" class="cash-cell" id="cash_${p.id}" value="-20" readonly style="background:#fdecea;border-color:#e57373;color:#c0392b;"></td>
+        <td><input type="number" class="cash-cell deduct" id="cash_${p.id}" value="-20" readonly aria-label="${p.name} deduction"></td>
       `;
     } else {
       tr.innerHTML = `
         <td>${nameCellHTML}</td>
-        <td><input type="number" id="opening_${p.id}" min="0" step="0.01" value="0" placeholder="0" onchange="recalcRow('${p.id}')" oninput="recalcRow('${p.id}')"></td>
-        <td><input type="number" id="received_${p.id}" min="0" step="0.01" value="0" placeholder="0" onchange="recalcRow('${p.id}')" oninput="recalcRow('${p.id}')"></td>
-        <td><input type="number" id="total_${p.id}" min="0" step="0.01" value="0" readonly></td>
-        <td><input type="number" id="sales_${p.id}" min="0" step="0.01" value="0" readonly style="background:var(--green-faint);border-color:var(--green-light);color:var(--green);font-weight:600;cursor:default;"></td>
-        <td><input type="number" class="balance-cell" id="balance_${p.id}" min="0" step="0.01" value="0" placeholder="0" onchange="recalcRow('${p.id}')" oninput="recalcRow('${p.id}')"></td>
+        <td><input type="number" id="opening_${p.id}" min="0" step="0.01" value="0" placeholder="0" inputmode="decimal" aria-label="${p.name} opening" onchange="recalcRow('${p.id}')" oninput="recalcRow('${p.id}')"></td>
+        <td><input type="number" id="received_${p.id}" min="0" step="0.01" value="0" placeholder="0" inputmode="decimal" aria-label="${p.name} received" onchange="recalcRow('${p.id}')" oninput="recalcRow('${p.id}')"></td>
+        <td><input type="number" id="total_${p.id}" min="0" step="0.01" value="0" readonly aria-label="${p.name} total"></td>
+        <td><input type="number" class="sales-cell" id="sales_${p.id}" min="0" step="0.01" value="0" readonly aria-label="${p.name} sales"></td>
+        <td><input type="number" class="balance-cell" id="balance_${p.id}" min="0" step="0.01" value="0" placeholder="0" inputmode="decimal" aria-label="${p.name} closing balance" onchange="recalcRow('${p.id}')" oninput="recalcRow('${p.id}')"></td>
         <td>${advCell}</td>
-        <td><input type="number" class="cash-cell" id="cash_${p.id}" value="0" readonly></td>
+        <td><input type="number" class="cash-cell" id="cash_${p.id}" value="0" readonly aria-label="${p.name} cash"></td>
       `;
     }
     tbody.appendChild(tr);
@@ -711,7 +786,7 @@ function renderTable() {
 }
 
 // ─────────────────────────────────────────────────────────────
-// CALCULATIONS
+// PRODUCT CALCULATIONS  (logic unchanged from the original app)
 // ─────────────────────────────────────────────────────────────
 
 function getVal(id) {
@@ -763,6 +838,7 @@ function recalcAll() {
   products.forEach(p => recalcRow(p.id));
 }
 
+// Total Sales = sum of product cash (incl. the −20 Morning Tea deduction), as before.
 function updateTotalCash() {
   const products = getProducts(currentShop);
   let total = 0;
@@ -772,21 +848,142 @@ function updateTotalCash() {
     const cash = p.isFixedDeduction ? -20 : getVal(`cash_${p.id}`);
     total += cash;
     if (p.isFixedDeduction) {
-      breakdown.push(`${p.name}: <strong style="color:#c0392b;">−KES 20</strong>`);
+      breakdown.push(`${p.name}: <strong class="deduct">−KES 20</strong>`);
     } else if (cash > 0) {
       breakdown.push(`${p.name}: <strong>KES ${formatNum(cash)}</strong>`);
     }
   });
 
-  document.getElementById('totalCashDisplay').textContent = `KES ${formatNum(total)}`;
-  document.getElementById('totalCashSub').textContent = total > 0 ? 'Total for ' + SHOP_NAMES[currentShop] : 'No sales entered yet';
+  $('totalCashDisplay').textContent = formatKES(total);
+  $('totalCashSub').textContent = total > 0 ? 'Total for ' + SHOP_NAMES[currentShop] : 'No sales entered yet';
+  $('cashBreakdown').innerHTML = breakdown.map(b => `<div class="cash-item">${b}</div>`).join('');
 
-  const bd = document.getElementById('cashBreakdown');
-  bd.innerHTML = breakdown.map(b => `<div class="cash-item">${b}</div>`).join('');
+  updateFinancials(total);
+  return total;
 }
 
 function formatNum(n) {
   return n.toLocaleString('en-KE', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+}
+
+function formatKES(n, signed = false) {
+  if (n < 0) return `−KES ${formatNum(Math.abs(n))}`;
+  return `${signed && n > 0 ? '+' : ''}KES ${formatNum(n)}`;
+}
+
+// ─────────────────────────────────────────────────────────────
+// CASH RECONCILIATION
+// ─────────────────────────────────────────────────────────────
+
+const round2 = (n) => Math.round((n + Number.EPSILON) * 100) / 100;
+
+// Cash In = Closing − Opening ; Difference = Total Sales − Cash In
+// Returns nulls when the closing cash has not been recorded.
+function computeCash(opening, closing, totalSales) {
+  if (!Number.isFinite(closing) || !Number.isFinite(opening)) return { cashIn: null, diff: null };
+  const cashIn = round2(closing - opening);
+  const diff = round2(totalSales - cashIn);
+  return { cashIn, diff };
+}
+
+function readClosingCash() {
+  const raw = $('closingCash').value.trim();
+  if (raw === '') return null;
+  const n = parseFloat(raw);
+  return Number.isFinite(n) ? n : null;
+}
+
+function readOpeningCash() {
+  const n = parseFloat($('openingCash').value);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function updateFinancials(totalSales) {
+  const opening = readOpeningCash();
+  const closing = readClosingCash();
+  const { cashIn, diff } = computeCash(opening, closing, totalSales);
+
+  $('cashInDisplay').textContent = cashIn === null ? '—' : formatKES(cashIn);
+
+  const plEl = $('plDisplay');
+  const chip = $('plChip');
+  let cls = 'zero';
+  let label = 'Enter closing cash';
+  if (diff === null) {
+    plEl.textContent = '—';
+  } else {
+    plEl.textContent = formatKES(diff, true);
+    if (diff > 0) { cls = 'pos'; label = 'Sales higher than cash in'; }
+    else if (diff < 0) { cls = 'neg'; label = 'Cash in higher than sales'; }
+    else { cls = 'zero'; label = 'Balanced'; }
+  }
+  plEl.className = 'fin-value ' + cls;
+  chip.className = 'fin-pl-chip ' + cls;
+  chip.textContent = label;
+}
+
+// Most recent earlier saved record, for this shop only, that has a closing cash value.
+function findPreviousClosingCash(shop, date) {
+  const prefix = shop + '_';
+  let best = null;
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (!k || !k.startsWith(prefix)) continue;
+    const d = k.slice(prefix.length);
+    if (!DATE_RE.test(d) || d >= date) continue;
+    if (best && d <= best.date) continue;
+    let rec;
+    try { rec = JSON.parse(localStorage.getItem(k)); } catch (e) { continue; }
+    const c = rec && rec._cash ? rec._cash.closing : null;
+    if (typeof c === 'number' && Number.isFinite(c)) best = { date: d, closing: c };
+  }
+  return best;
+}
+
+// Populate opening/closing cash fields for the current shop/date.
+// `record` is the saved record (or null for a new/empty form).
+function initCashFields(record) {
+  const prev = findPreviousClosingCash(currentShop, currentDate);
+  const saved = record && record._cash ? record._cash : null;
+  const savedOpening = saved && Number.isFinite(saved.opening) ? saved.opening : null;
+  const savedClosing = saved && Number.isFinite(saved.closing) ? saved.closing : null;
+
+  const openEl = $('openingCash');
+  const opening = savedOpening !== null ? savedOpening : (prev ? prev.closing : 0);
+  openEl.value = opening;
+
+  const tag = $('openingTag');
+  const note = $('openingNote');
+  if (prev) {
+    openEl.readOnly = true;
+    tag.textContent = 'AUTO';
+    tag.classList.remove('tag-edit');
+    note.textContent = (savedOpening !== null && savedOpening !== prev.closing)
+      ? `Saved with this record. Latest earlier closing: ${formatKES(prev.closing)} (${prev.date}).`
+      : `Carried forward from ${prev.date} closing cash.`;
+  } else {
+    openEl.readOnly = false;
+    tag.textContent = 'ENTER';
+    tag.classList.add('tag-edit');
+    note.textContent = 'No earlier closing cash for this shop. Enter a starting balance, or leave at 0.';
+  }
+
+  $('closingCash').value = savedClosing !== null ? savedClosing : '';
+}
+
+function buildCashRecord() {
+  const totalSales = updateTotalCash();
+  const opening = readOpeningCash();
+  const closing = readClosingCash();
+  const { cashIn, diff } = computeCash(opening, closing, totalSales);
+  return {
+    opening,
+    closing,
+    cashIn,
+    totalSales,
+    difference: diff,
+    savedAt: new Date().toISOString()
+  };
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -815,42 +1012,56 @@ function getCurrentData() {
   return data;
 }
 
+function readSaved(key) {
+  const raw = localStorage.getItem(key);
+  if (!raw) return null;
+  try { return JSON.parse(raw); } catch (e) { return null; }
+}
+
 function saveRecord() {
   const key = storageKey(currentShop, currentDate);
-  const data = getCurrentData();
+  const existing = readSaved(key) || {};
+  // Merge so any fields this version does not know about are never lost.
+  const data = Object.assign({}, existing, getCurrentData());
+  data._cash = buildCashRecord();
   localStorage.setItem(key, JSON.stringify(data));
-  document.getElementById('statusRecord').textContent = '✅ Saved';
+  $('statusRecord').textContent = 'Saved';
   updateDownloadMeta();
-  showToast('Record saved!');
+  if (readClosingCash() === null) showToast('Saved. Closing cash not entered yet.');
+  else showToast('Record saved!');
 }
 
 function loadRecord() {
   const key = storageKey(currentShop, currentDate);
   const raw = localStorage.getItem(key);
-
+  let data = null;
   if (raw) {
-    const data = JSON.parse(raw);
+    try { data = JSON.parse(raw); } catch (e) { data = null; showToast('Saved record could not be read', true); }
+  }
+
+  if (data) {
     applyData(data);
-    document.getElementById('statusRecord').textContent = '📂 Loaded';
+    initCashFields(data);
+    updateTotalCash();
+    $('statusRecord').textContent = 'Loaded';
   } else {
     // Try previous day's balance as opening
     clearFormSilent();
     loadPrevDayBalance();
-    document.getElementById('statusRecord').textContent = '✨ New Record';
+    initCashFields(null);
+    updateTotalCash();
+    $('statusRecord').textContent = 'New Record';
   }
 }
 
+// Product opening stock = most recent saved closing balance (looks back up to 30 days).
 function loadPrevDayBalance() {
-  // Find previous day with data for this shop
-  const d = new Date(currentDate);
-  d.setDate(d.getDate() - 1);
+  let prevDate = shiftDate(currentDate, -1);
 
   for (let i = 0; i < 30; i++) {
-    const prevDate = d.toISOString().split('T')[0];
     const key = storageKey(currentShop, prevDate);
-    const raw = localStorage.getItem(key);
-    if (raw) {
-      const data = JSON.parse(raw);
+    const data = readSaved(key);
+    if (data) {
       const products = getProducts(currentShop);
       products.forEach(p => {
         if (p.isFixedDeduction) return;
@@ -864,7 +1075,7 @@ function loadPrevDayBalance() {
       showToast(`Opening loaded from ${prevDate}`, false);
       return;
     }
-    d.setDate(d.getDate() - 1);
+    prevDate = shiftDate(prevDate, -1);
   }
 }
 
@@ -889,6 +1100,8 @@ function applyData(data) {
 
 function clearForm() {
   clearFormSilent();
+  initCashFields(null);
+  updateTotalCash();
   showToast('Form cleared');
 }
 
@@ -906,37 +1119,169 @@ function clearFormSilent() {
 }
 
 // ─────────────────────────────────────────────────────────────
+// DAY SUMMARY FROM A SAVED RECORD (used by History and CSV)
+// Fields not recorded (older records) come back as null.
+// ─────────────────────────────────────────────────────────────
+
+function dayCash(shop, data) {
+  let totalSales = 0;
+  getProducts(shop).forEach(p => {
+    if (p.isFixedDeduction) totalSales += -20;
+    else if (data[p.id] && Number.isFinite(data[p.id].cash)) totalSales += data[p.id].cash;
+  });
+  const c = data && data._cash ? data._cash : null;
+  const opening = c && Number.isFinite(c.opening) ? c.opening : null;
+  const closing = c && Number.isFinite(c.closing) ? c.closing : null;
+  const { cashIn, diff } = (opening !== null && closing !== null)
+    ? computeCash(opening, closing, totalSales)
+    : { cashIn: null, diff: null };
+  return { totalSales, opening, closing, cashIn, diff };
+}
+
+function listSavedDates(shop) {
+  const prefix = shop + '_';
+  const out = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (!k || !k.startsWith(prefix)) continue;
+    const d = k.slice(prefix.length);
+    if (!DATE_RE.test(d)) continue;
+    const data = readSaved(k);
+    if (data) out.push({ date: d, data });
+  }
+  out.sort((a, b) => b.date.localeCompare(a.date));
+  return out;
+}
+
+// ─────────────────────────────────────────────────────────────
+// HISTORY
+// ─────────────────────────────────────────────────────────────
+
+const NR = '<span class="nr">Not recorded</span>';
+
+function prettyDate(dateStr) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString('en-KE', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function cellNum(v) {
+  const n = Number(v);
+  return (v === undefined || v === null || !Number.isFinite(n)) ? '—' : formatNum(n);
+}
+
+function openHistoryDate(date) {
+  currentDate = date;
+  $('dateInput').value = date;
+  renderHistory();
+  updateStatus();
+}
+
+function renderHistory() {
+  const shop = currentShop;
+  $('histShopName').textContent = SHOP_NAMES[shop];
+  const saved = listSavedDates(shop);
+
+  // Saved-dates list
+  const list = $('histList');
+  if (saved.length === 0) {
+    list.innerHTML = `<div class="empty">No saved records for ${SHOP_NAMES[shop]} yet.</div>`;
+  } else {
+    list.innerHTML = saved.map(({ date, data }) => {
+      const dc = dayCash(shop, data);
+      const cashLabel = dc.closing === null ? 'Cash not recorded' : `Closing ${formatKES(dc.closing)}`;
+      return `<button type="button" class="hist-item${date === currentDate ? ' active' : ''}" onclick="openHistoryDate('${date}')">
+        <div class="hi-top"><span>${prettyDate(date)}</span><span>${formatKES(dc.totalSales)}</span></div>
+        <div class="hi-sub">${cashLabel}</div>
+      </button>`;
+    }).join('');
+  }
+
+  // Detail for the selected date
+  const detail = $('histDetail');
+  const rec = saved.find(s => s.date === currentDate);
+  if (!rec) {
+    detail.innerHTML = `<div class="empty">No saved record for ${SHOP_NAMES[shop]} on ${prettyDate(currentDate)}.<br>Pick a saved date from the list, or change the date at the top.</div>`;
+    return;
+  }
+
+  const data = rec.data;
+  const dc = dayCash(shop, data);
+  let diffHTML = NR;
+  if (dc.diff !== null) {
+    const cls = dc.diff > 0 ? 'pos' : dc.diff < 0 ? 'neg' : 'zero';
+    diffHTML = `<span class="${cls}">${formatKES(dc.diff, true)}</span>`;
+  }
+  const val = (n) => n === null ? NR : formatKES(n);
+
+  const rows = getProducts(shop).map(p => {
+    const d = data[p.id];
+    if (p.isFixedDeduction) {
+      return `<tr><td><div class="product-name">${p.name}</div></td><td colspan="5" class="muted-note" style="text-align:center;">Fixed daily deduction</td><td>—</td><td>−20</td></tr>`;
+    }
+    if (!d) {
+      return `<tr><td><div class="product-name">${p.name}</div></td><td colspan="7" class="muted-note" style="text-align:center;">No data saved</td></tr>`;
+    }
+    return `<tr>
+      <td><div class="product-name">${p.name}</div></td>
+      <td>${cellNum(d.opening)}</td><td>${cellNum(d.received)}</td><td>${cellNum(d.total)}</td>
+      <td>${cellNum(d.sales)}</td><td>${cellNum(d.balance)}</td>
+      <td>${p.isMilk ? cellNum(d.advance) : '—'}</td><td>${cellNum(d.cash)}</td>
+    </tr>`;
+  }).join('');
+
+  detail.innerHTML = `
+    <div class="hist-title">${SHOP_NAMES[shop]} · ${prettyDate(currentDate)}</div>
+    <div class="hist-sub">Saved record (read-only)</div>
+    <div class="hist-cards">
+      <div class="mini hero"><div class="fin-label">Total Sales</div><div class="mv">${formatKES(dc.totalSales)}</div></div>
+      <div class="mini"><div class="fin-label">Cash In</div><div class="mv">${val(dc.cashIn)}</div></div>
+      <div class="mini"><div class="fin-label">Opening Cash</div><div class="mv">${val(dc.opening)}</div></div>
+      <div class="mini"><div class="fin-label">Closing Cash</div><div class="mv">${val(dc.closing)}</div></div>
+      <div class="mini"><div class="fin-label">P&amp;L / Cash Diff.</div><div class="mv">${diffHTML}</div></div>
+    </div>
+    <div class="table-wrap hist-table" style="margin-bottom:14px;">
+      <table>
+        <thead><tr><th>Product</th><th>Opening</th><th>Received</th><th>Total</th><th>Sales</th><th>Closing Bal.</th><th>Adv.</th><th>Cash (KES)</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    <div class="actions-bar" style="margin-bottom:0;">
+      <button type="button" class="btn btn-outline" onclick="showView('dashboard')">Open on Dashboard</button>
+    </div>`;
+}
+
+// ─────────────────────────────────────────────────────────────
 // CSV DOWNLOAD (per shop)
+// Original columns are unchanged; five cash columns are appended.
 // ─────────────────────────────────────────────────────────────
 
 function downloadCSV(shop) {
   const shopName = SHOP_NAMES[shop];
   const products = getProducts(shop);
-  const rows = [['Date', 'Shop', 'Product', 'Unit', 'Opening', 'Received', 'Total', 'Sales', 'Balance', 'Advance', 'Cash (KES)']];
+  const rows = [[
+    'Date', 'Shop', 'Product', 'Unit', 'Opening', 'Received', 'Total', 'Sales', 'Balance', 'Advance', 'Cash (KES)',
+    'Opening Cash Balance', 'Closing Cash Balance', 'Cash In for the Day', 'Total Sales', 'P&L / Cash Difference'
+  ]];
 
-  // Gather all keys for this shop
-  const keys = [];
-  for (let i = 0; i < localStorage.length; i++) {
-    const k = localStorage.key(i);
-    if (k && k.startsWith(shop + '_')) keys.push(k);
-  }
+  const saved = listSavedDates(shop).reverse(); // oldest first
 
-  if (keys.length === 0) {
+  if (saved.length === 0) {
     showToast(`No data saved for ${shopName} yet!`, true);
     return;
   }
 
-  keys.sort(); // sort by date
-  keys.forEach(k => {
-    const date = k.replace(shop + '_', '');
-    const data = JSON.parse(localStorage.getItem(k));
+  const blank = (v) => (v === null || v === undefined) ? '' : v;
+
+  saved.forEach(({ date, data }) => {
+    const dc = dayCash(shop, data);
     products.forEach(p => {
       const d = data[p.id];
       if (!d) return;
       rows.push([
         date, shopName, p.name, p.unit || '',
-        d.opening, d.received, d.total, d.sales,
-        d.balance, d.advance || 0, d.cash
+        blank(d.opening), blank(d.received), blank(d.total), blank(d.sales),
+        blank(d.balance), d.advance || 0, blank(d.cash),
+        blank(dc.opening), blank(dc.closing), blank(dc.cashIn), dc.totalSales, blank(dc.diff)
       ]);
     });
   });
@@ -947,8 +1292,10 @@ function downloadCSV(shop) {
   const a = document.createElement('a');
   a.href = url;
   a.download = `${shop}_sales.csv`;
+  document.body.appendChild(a);
   a.click();
-  URL.revokeObjectURL(url);
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
   showToast(`Downloaded ${shop}_sales.csv`);
 }
 
@@ -957,11 +1304,12 @@ function downloadCSV(shop) {
 // ─────────────────────────────────────────────────────────────
 
 function updateDownloadMeta() {
-  ['karura', 'bima', 'kiamumbi', 'kiwanja'].forEach(shop => {
+  Object.keys(SHOP_NAMES).forEach(shop => {
     let count = 0;
+    const prefix = shop + '_';
     for (let i = 0; i < localStorage.length; i++) {
       const k = localStorage.key(i);
-      if (k && k.startsWith(shop + '_')) count++;
+      if (k && k.startsWith(prefix) && DATE_RE.test(k.slice(prefix.length))) count++;
     }
     const el = document.getElementById(`dlMeta_${shop}`);
     if (el) el.textContent = `${shop}_sales.csv · ${count} day${count !== 1 ? 's' : ''} of data`;
