@@ -866,7 +866,7 @@ function renderTable() {
     }
 
     const advCell = p.isMilk
-      ? `<input type="number" class="adv-cell" id="adv_${p.id}" min="0" step="0.1" value="0" placeholder="0" inputmode="decimal" aria-label="${p.name} advances" onchange="recalcRow('${p.id}')" oninput="recalcRow('${p.id}')">`
+      ? `<input type="number" class="adv-cell" id="adv_${p.id}" min="0" step="0.1" value="0" placeholder="0" inputmode="decimal" readonly aria-label="${p.name} prepaid collections" title="Automatically calculated from prepaid milk collected today">`
       : `<span style="color:var(--text3);font-size:12px;">—</span>`;
 
     // Morning tea: fixed deduction row — no stock inputs needed
@@ -910,6 +910,7 @@ function setVal(id, val) {
 }
 
 function recalcRow(pid) {
+  if (pid === "fresh_milk") syncPrepaidAdvance();
   const products = getProducts(currentShop);
   const p = products.find(x => x.id === pid);
 
@@ -1370,9 +1371,11 @@ function ppCollected(a){return (a.collections||[]).reduce((s,c)=>s+Number(c.litr
 function ppRemain(a){return Math.max(0,Number(a.totalLitres||0)-ppCollected(a))}
 function ppDue(a){return Math.max(0,Number(a.totalValue||0)-ppPaid(a))}
 function ppDay(shop,date){return ppGet(shop).reduce((s,a)=>s+(a.payments||[]).filter(p=>p.date===date).reduce((x,p)=>x+Number(p.amount||0),0),0)}
+function ppCollectedDay(shop,date){return ppGet(shop).reduce((s,a)=>s+(a.collections||[]).filter(c=>c.date===date).reduce((x,c)=>x+Number(c.litres||0),0),0)}
+function syncPrepaidAdvance(){const el=document.getElementById("adv_fresh_milk");if(el)el.value=ppCollectedDay(currentShop,currentDate).toFixed(2)}
 function ppCalc(){const d=Number(document.getElementById("ppDaily").value||0),p=Number(document.getElementById("ppPrice").value||0),s=document.getElementById("ppStart").value,e=document.getElementById("ppEnd").value;if(!s||!e||e<s||d<=0)return;const days=Math.round((new Date(e+"T00:00:00")-new Date(s+"T00:00:00"))/86400000)+1;document.getElementById("ppAmount").value=(d*days*p).toFixed(2)}
 function addPrepaid(ev){ev.preventDefault();const name=document.getElementById("ppName").value.trim(),s=document.getElementById("ppStart").value,e=document.getElementById("ppEnd").value,d=Number(document.getElementById("ppDaily").value),p=Number(document.getElementById("ppPrice").value),amount=Number(document.getElementById("ppAmount").value);if(!name||!s||!e||e<s||d<=0||p<0||amount<0){showToast("Check customer details",true);return}const days=Math.round((new Date(e+"T00:00:00")-new Date(s+"T00:00:00"))/86400000)+1;const a={id:"pp"+Date.now(),name,phone:document.getElementById("ppPhone").value,shop:currentShop,start:s,end:e,daily:d,price:p,days,totalLitres:round2(d*days),totalValue:round2(d*days*p),payments:[{date:currentDate,amount,method:document.getElementById("ppMethod").value}],collections:[]};const list=ppGet(currentShop);list.unshift(a);ppSave(currentShop,list);document.getElementById("prepaidForm").reset();document.getElementById("ppDaily").value="1.5";document.getElementById("ppPrice").value="75";renderPrepaid();updateTotalCash();showToast("Prepaid saved; payment included in sales today")}
-function ppUpdate(id,fn){const a=ppGet(currentShop),x=a.find(v=>v.id===id);if(!x)return;fn(x);ppSave(currentShop,a);renderPrepaid();updateTotalCash()}
+function ppUpdate(id,fn){const a=ppGet(currentShop),x=a.find(v=>v.id===id);if(!x)return;fn(x);ppSave(currentShop,a);renderPrepaid();recalcRow("fresh_milk");updateTotalCash()}
 function ppPayment(id){const a=ppGet(currentShop).find(v=>v.id===id);if(!a)return;const n=Number(prompt("Payment amount (KES)"));if(!Number.isFinite(n)||n<=0)return;const method=prompt("Payment method","Cash")||"Cash";ppUpdate(id,x=>x.payments.push({date:currentDate,amount:round2(n),method}));showToast("Payment recorded and added to today sales")}
 function ppCollection(id){const a=ppGet(currentShop).find(v=>v.id===id);if(!a)return;const rem=ppRemain(a);if(!rem)return showToast("No milk remaining",true);const n=Number(prompt("Litres collected today (remaining "+formatNum(rem)+" L)",String(Math.min(a.daily,rem))));if(!Number.isFinite(n)||n<=0||n>rem)return showToast("Invalid collection quantity",true);ppUpdate(id,x=>x.collections.push({date:currentDate,litres:round2(n),value:round2(n*x.price)}));showToast("Milk collection logged; no duplicate payment")}
 function ppDelete(id){if(!confirm("Delete this prepaid account?"))return;ppSave(currentShop,ppGet(currentShop).filter(a=>a.id!==id));renderPrepaid();updateTotalCash()}
